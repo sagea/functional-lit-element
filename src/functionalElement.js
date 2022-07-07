@@ -1,25 +1,20 @@
 export default (dependencies) => {
     const { LitElement, createUseState, createUseEffect, createUseReducer, createUseContext, createProvideContext } = dependencies;
 
-    return (render, props = {}, styles = []) => {
+    return (render, props = {}, styles) => {
         const getProps = (element) => Object.keys(props).reduce((renderProps, propName) => {
             renderProps[propName] = element[propName];
             return renderProps;
         }, {});
-
+       const properties = {
+            _dynamicState: {type: Object},
+            _dynamicReducerState: {type: Object},
+            _context: {type: Object},
+           ...props,
+        };
         return class extends LitElement {
-            static get properties() {
-                const dynamicState = {
-                    _dynamicState: {type: Object},
-                    _dynamicReducerState: {type: Object},
-                    _context: {type: Object}
-                };
-                return Object.assign({}, dynamicState, props);
-            }
-
-            static get styles() {
-                return styles;
-            }
+            static get properties() { return properties; }
+            static get styles() { return styles; }
 
             constructor() {
                 super();
